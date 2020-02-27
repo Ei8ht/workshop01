@@ -39,6 +39,10 @@ public class Util {
         return false;
     }
 
+    public static boolean isNotEmpty(Object obj) {
+        return !isEmpty(obj);
+    }
+
     public static <T> Optional<T> wrap(T object) {
         if(!isEmpty(object)){
             return Optional.of(object);

@@ -1,6 +1,7 @@
 package com.icd.wksh.daos;
 
 import com.icd.wksh.commons.Util;
+import com.icd.wksh.models.RolePermission;
 import com.icd.wksh.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,5 +50,23 @@ public class UserDao {
             result = resultList.get(0);
         }
         return result;
+    }
+
+    public List<RolePermission> getPermissionByRoleId(BigDecimal roleId) {
+        log.debug("call: getUserByUsername");
+        StringBuilder statement = new StringBuilder();
+        List<RolePermission> resultList = null;
+        List<Object> param = new ArrayList<>();
+        statement.append(" SELECT `role_permission`.`permission_id`, ");
+        statement.append("     `role_permission`.`role_id`, ");
+        statement.append("     `role_permission`.`permission_description` ");
+        statement.append(" FROM `icd-workshop-01-db`.`role_permission` ");
+        statement.append(" WHERE `role_permission`.`role_id` = ? ");
+        param.add(roleId);
+
+        log.debug("statement: {}", statement.toString());
+        resultList = jdbcTemplate.query(statement.toString(), param.toArray(), new BeanPropertyRowMapper<>(RolePermission.class));
+        log.debug("resultList size: " + String.valueOf(resultList != null ? resultList.size() : 0));
+        return resultList;
     }
 }
