@@ -1,6 +1,9 @@
 package com.icd.wksh.commons;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,4 +46,10 @@ public class Util {
             return Optional.empty();
         }
     }
+
+    public static Date convertLocalDateTimeToDate(LocalDateTime dateTime) {
+        Date out = Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
+        return out;
+    }
+
 }

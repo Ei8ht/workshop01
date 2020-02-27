@@ -20,9 +20,9 @@ public class WorkShop01Application {
 		ConfigurableApplicationContext context = SpringApplication.run(WorkShop01Application.class, args);
 //		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 //		log.debug("encode: {}", passwordEncoder.encode("password"));
-		UserDao userDao = context.getBean(UserDao.class);
-		User admin = userDao.getUserByUsername("admin");
-		log.debug("admin: {}", admin);
+//		UserDao userDao = context.getBean(UserDao.class);
+//		User admin = userDao.getUserByUsername("admin");
+//		log.debug("admin: {}", admin);
 	}
 
 }

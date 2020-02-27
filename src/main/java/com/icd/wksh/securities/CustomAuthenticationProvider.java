@@ -1,6 +1,5 @@
 package com.icd.wksh.securities;
 
-import com.icd.wksh.controllers.HelloController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
-    private static final Logger log = LoggerFactory.getLogger(HelloController.class);
+    private static final Logger log = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
