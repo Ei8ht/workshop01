@@ -24,16 +24,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService jwtUserDetailsService;
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
+    @Autowired
+    private CustomRequestFilter customRequestFilter;
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf().disable()
                 .cors().and()
-                .exceptionHandling()
-                .authenticationEntryPoint(unauthorizedHandler).and()
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+//                .addFilterAfter(customRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers("/hello/**").permitAll()
                 .antMatchers(
                         "/v2/api-docs",           // swagger
                         "/webjars/**",            // swagger-ui webjars
@@ -41,7 +45,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/configuration/**",      // swagger configuration
                         "/*.html").permitAll()
                 .anyRequest().authenticated();
-        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

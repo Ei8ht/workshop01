@@ -45,7 +45,7 @@ public class UserDao {
 
         log.debug("statement: {}", statement.toString());
         resultList = jdbcTemplate.query(statement.toString(), param.toArray(), new BeanPropertyRowMapper<>(User.class));
-        log.debug("resultList size: " + String.valueOf(resultList != null ? resultList.size() : 0));
+//        log.debug("resultList size: " + String.valueOf(resultList != null ? resultList.size() : 0));
         if(!Util.isEmpty(resultList)) {
             result = resultList.get(0);
         }
@@ -66,7 +66,7 @@ public class UserDao {
 
         log.debug("statement: {}", statement.toString());
         resultList = jdbcTemplate.query(statement.toString(), param.toArray(), new BeanPropertyRowMapper<>(RolePermission.class));
-        log.debug("resultList size: " + String.valueOf(resultList != null ? resultList.size() : 0));
+//        log.debug("resultList size: " + String.valueOf(resultList != null ? resultList.size() : 0));
         return resultList;
     }
 }

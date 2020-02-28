@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 public class HelloController {
     private static final Logger log = LoggerFactory.getLogger(HelloController.class);
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN:READ')")
+//    @PreAuthorize("hasAuthority('ADMIN:READ')")
     public ResponseEntity getMessage(@RequestParam("message") String message){
         log.debug("controller: getMessage: {}",message);
         return ResponseEntity.ok("Hello "+message);

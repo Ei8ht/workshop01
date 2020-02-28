@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -44,23 +45,22 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			try {
 				username = jwtTokenUtil.getUsernameFromToken(jwtToken);
 			} catch (IllegalArgumentException e) {
-				System.out.println("Unable to get JWT Token");
+				log.error("Unable to get JWT Token");
+//				throw new RuntimeException("Unable to get JWT Token");
 			} catch (ExpiredJwtException e) {
-				System.out.println("JWT Token has expired");
+				log.error("JWT Token has expired");
+//				throw new RuntimeException("Unable to get JWT Token");
 			}
 		} else {
 			logger.warn("JWT Token does not begin with Bearer String");
+			SecurityContextHolder.getContext().setAuthentication(null);
 		}
 
 		// Once we get the token validate it.
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
 			UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
-
 			// if token is valid configure Spring Security to manually set
-			// authentication
 			if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
-
 				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());
 				usernamePasswordAuthenticationToken
@@ -69,6 +69,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				// that the current user is authenticated. So it passes the
 				// Spring Security Configurations successfully.
 				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+			} else {
+				log.error("Invalid token");
+				SecurityContextHolder.getContext().setAuthentication(null);
 			}
 		}
 		chain.doFilter(request, response);
