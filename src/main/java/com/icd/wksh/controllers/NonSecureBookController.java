@@ -18,14 +18,13 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/books")
-public class BookController {
-    private static final Logger log = LoggerFactory.getLogger(BookController.class);
+@RequestMapping("/not-secure/books")
+public class NonSecureBookController {
+    private static final Logger log = LoggerFactory.getLogger(NonSecureBookController.class);
     @Autowired
     private BookService bookService;
 
     @GetMapping("/categories")
-    @PreAuthorize("hasAuthority('ADMIN:READ')")
     public ResponseEntity getCategories(){
         log.debug("controller: getCategories:");
         Optional<List<Category>> categories = bookService.getCategories();
@@ -38,7 +37,6 @@ public class BookController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN:READ')")
     public ResponseEntity getBooks(){
         log.debug("controller: getBooks:");
         Optional<List<Book>> books = bookService.getBooks();
@@ -51,7 +49,6 @@ public class BookController {
     }
 
     @GetMapping("/{bookId}")
-    @PreAuthorize("hasAuthority('ADMIN:READ')")
     public ResponseEntity getBooksById(@PathVariable String bookId){
         log.debug("controller: getBooksById:");
         BigDecimal bookIdVal = null;
@@ -71,7 +68,6 @@ public class BookController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN:WRITE')")
     public ResponseEntity insertBook(@RequestBody BookRequest body){
         log.debug("controller: insertBook: body={}",body);
         int rowEffected = bookService.insertBook(body);
@@ -83,7 +79,6 @@ public class BookController {
     }
 
     @PutMapping("/{bookId}")
-    @PreAuthorize("hasAuthority('ADMIN:WRITE')")
     public ResponseEntity updateBook(@PathVariable String bookId, @RequestBody BookRequest body){
         log.debug("controller: updateBook: body={}, bookId={}",body,bookId);
         BigDecimal bookIdVal = null;
@@ -102,7 +97,6 @@ public class BookController {
     }
 
     @DeleteMapping("/{bookId}")
-    @PreAuthorize("hasAuthority('ADMIN:WRITE')")
     public ResponseEntity deleteBook(@PathVariable String bookId){
         log.debug("controller: deleteBook: bookId={}",bookId);
         BigDecimal bookIdVal = null;

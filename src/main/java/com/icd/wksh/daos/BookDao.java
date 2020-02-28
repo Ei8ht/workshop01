@@ -91,6 +91,7 @@ public class BookDao {
         log.debug("rows: " + rows);
         return rows;
     }
+
     public int updateBook(BookRequest request, BigDecimal bookId){
         log.debug("call: updateBook: request={}, bookId={}",request,bookId);
         StringBuilder statement = new StringBuilder();
@@ -109,6 +110,21 @@ public class BookDao {
         statement.append(" `category_id` = ? ");
         param.add(request.getCategoryId());
         statement.append(" WHERE `book_id` = ? ");
+        param.add(bookId);
+
+        log.debug("statement: {}",statement.toString());
+        rows = jdbcTemplate.update(statement.toString(), param.toArray());
+        log.debug("rows: " + rows);
+        return rows;
+    }
+
+    public int deleteBook(BigDecimal bookId){
+        log.debug("call: deleteBook: bookId={}",bookId);
+        StringBuilder statement = new StringBuilder();
+        List<Object> param = new ArrayList<>();
+        int rows = 0;
+        statement.append(" DELETE FROM `icd-workshop-01-db`.`book` ");
+        statement.append(" WHERE `book`.`book_id` = ? ");
         param.add(bookId);
 
         log.debug("statement: {}",statement.toString());

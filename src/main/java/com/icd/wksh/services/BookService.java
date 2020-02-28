@@ -50,4 +50,9 @@ public class BookService {
         return bookDao.updateBook(request,bookId);
     }
 
+    public int deleteBook(BigDecimal bookId){
+        log.debug("service: deleteBook: bookId={}",bookId);
+        return bookDao.deleteBook(bookId);
+    }
+
 }
