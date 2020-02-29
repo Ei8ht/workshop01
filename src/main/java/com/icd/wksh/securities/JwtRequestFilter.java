@@ -1,5 +1,6 @@
 package com.icd.wksh.securities;
 
+import com.icd.wksh.commons.Constant;
 import com.icd.wksh.services.JwtUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.slf4j.Logger;
@@ -68,6 +69,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				// After setting the Authentication in the context, we specify
 				// that the current user is authenticated. So it passes the
 				// Spring Security Configurations successfully.
+				request.setAttribute(Constant.MESSAGE, username);
 				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 			} else {
 				log.error("Invalid token");
