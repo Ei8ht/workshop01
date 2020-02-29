@@ -3,6 +3,8 @@ package com.icd.wksh;
 import com.icd.wksh.controllers.HelloController;
 import com.icd.wksh.daos.UserDao;
 import com.icd.wksh.models.User;
+import com.icd.wksh.simple.Canon;
+import com.icd.wksh.simple.Printer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ public class WorkShop01Application {
 //		UserDao userDao = context.getBean(UserDao.class);
 //		User admin = userDao.getUserByUsername("admin");
 //		log.debug("admin: {}", admin);
+//		Printer printer = context.getBean(Printer.class);
+//		log.debug("printer: {}",printer.print());
 	}
 
 }
