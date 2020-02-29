@@ -25,8 +25,8 @@ public class WorkShop01Application {
 //		UserDao userDao = context.getBean(UserDao.class);
 //		User admin = userDao.getUserByUsername("admin");
 //		log.debug("admin: {}", admin);
-//		Printer printer = context.getBean(Printer.class);
-//		log.debug("printer: {}",printer.print());
+//		HelloController printer = context.getBean(HelloController.class);
+//		printer.test();
 	}
 
 }

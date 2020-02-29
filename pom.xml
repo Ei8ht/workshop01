@@ -64,6 +64,7 @@
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
+		<!-- mvn install:install-file -Dfile=D:\THSarabunNew.jar -DgroupId=com.mg.report -DartifactId=mg.sarabun -Dversion=1.0.0 -Dpackaging=jar -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
