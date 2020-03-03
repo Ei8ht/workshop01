@@ -27,12 +27,13 @@ public class BookService {
 
     public Optional<List<Book>> getBooks(){
         log.debug("service: getBooks");
+        bookDao.getBooksProcedure();
         return Util.wrap(bookDao.getBooks(null));
     }
 
     public Optional<Book> getBooksById(BigDecimal bookId){
         log.debug("service: getBooksById: bookId={}",bookId);
-        List<Book> books = bookDao.getBooks(bookId);
+        List<Book> books = bookDao.getBooksNamed(bookId);
         Book result = null;
         if(Util.isNotEmpty(books)){
             result = books.get(0);
