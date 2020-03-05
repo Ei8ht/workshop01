@@ -37,7 +37,7 @@ public class NonSecureWorkshopController {
     @PostMapping
     public ResponseEntity insertBook(@RequestBody WorkshopA body){
         log.debug("controller: insertBook: body={}",body);
-        int rowEffected = workshopService.insertWorkshop(body);
+        int rowEffected = workshopService.insert(body);
         if(rowEffected > 0){
             return ResponseEntity.ok(Response.success(rowEffected+" row effected"));
         } else {

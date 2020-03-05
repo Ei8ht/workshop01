@@ -58,11 +58,37 @@ public class WorkshopDao {
         List<Object> param = new ArrayList<>();
         int rows = 0;
         statement.append(" INSERT INTO `icd-workshop-01-db`.`workshop_a` ");
-        statement.append(" ( ");
+        statement.append(" ( `id` ,");
         statement.append(" `value1`, ");
         statement.append(" `value2`) ");
         statement.append(" VALUES ");
         statement.append(" ( ");
+        statement.append(" ? , ");
+        param.add(object.getId());
+        statement.append(" ? , ");
+        param.add(object.getValue1());
+        statement.append(" ? ) ");
+        param.add(object.getValue2());
+
+        log.debug("statement: {}",statement.toString());
+        rows = jdbcTemplate.update(statement.toString(), param.toArray());
+        log.debug("rows: " + rows);
+        return rows;
+    }
+
+    public int insertWorkshopB(WorkshopA object){
+        log.debug("call: insertWorkshopB: object={}",object);
+        StringBuilder statement = new StringBuilder();
+        List<Object> param = new ArrayList<>();
+        int rows = 0;
+        statement.append(" INSERT INTO `icd-workshop-01-db`.`workshop_b` ");
+        statement.append(" ( `id` ,");
+        statement.append(" `value1`, ");
+        statement.append(" `value2`) ");
+        statement.append(" VALUES ");
+        statement.append(" ( ");
+        statement.append(" ? , ");
+        param.add(object.getId());
         statement.append(" ? , ");
         param.add(object.getValue1());
         statement.append(" ? ) ");

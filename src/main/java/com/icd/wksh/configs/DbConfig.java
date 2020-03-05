@@ -35,6 +35,7 @@ public class DbConfig {
         dbConfig.setDriverClassName(driverName);
         dbConfig.setUsername(username);
         dbConfig.setPassword(password);
+        dbConfig.setAutoCommit(true);
         return new HikariDataSource(dbConfig);
     }
 
@@ -44,19 +45,19 @@ public class DbConfig {
     }
 
     @Bean
-    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(@Qualifier("msDataSource") DataSource mySqlDataSource) {
+    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource mySqlDataSource) {
         return new NamedParameterJdbcTemplate(mySqlDataSource);
     }
 
     @Bean
-    public SimpleJdbcCall simpleJdbcCall(@Qualifier("msDataSource") DataSource mySqlDataSource) {
-        return new SimpleJdbcCall(mySqlDataSource);
+    public SimpleJdbcCall simpleJdbcCall(DataSource msDataSource) {
+        return new SimpleJdbcCall(msDataSource);
     }
 
     @Bean(name = "msTransaction")
-    public PlatformTransactionManager msTransaction()  {
+    public PlatformTransactionManager msTransaction(DataSource msDataSource)  {
         DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
-        transactionManager.setDataSource(msDataSource());
+        transactionManager.setDataSource(msDataSource);
         return transactionManager;
     }
 }

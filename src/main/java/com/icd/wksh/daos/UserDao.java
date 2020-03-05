@@ -19,7 +19,7 @@ import java.util.List;
 public class UserDao {
     private static final Logger log = LoggerFactory.getLogger(UserDao.class);
     @Autowired
-    @Qualifier("msJdbcTemplate")
+//    @Qualifier("msJdbcTemplate")
     private JdbcTemplate jdbcTemplate;
 
     public User getUserByUsername(String username) {
