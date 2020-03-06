@@ -2,7 +2,7 @@ package com.icd.wksh.simple;
 
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class Canon implements Printer {
 
     @Override

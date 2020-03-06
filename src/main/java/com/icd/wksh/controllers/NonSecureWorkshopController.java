@@ -1,6 +1,7 @@
 package com.icd.wksh.controllers;
 
 import com.icd.wksh.commons.Response;
+import com.icd.wksh.configs.Printer;
 import com.icd.wksh.exceptions.BadRequestException;
 import com.icd.wksh.models.Book;
 import com.icd.wksh.models.Category;
@@ -11,6 +12,7 @@ import com.icd.wksh.services.WorkshopService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +26,14 @@ public class NonSecureWorkshopController {
     private static final Logger log = LoggerFactory.getLogger(NonSecureWorkshopController.class);
     @Autowired
     private WorkshopService workshopService;
+    @Autowired
+    @Qualifier("Brother1")
+    private Printer printer;
+
 
     @GetMapping
     public ResponseEntity getWorkshopAList(@RequestParam(value = "id", required = false) BigDecimal id){
+        printer.print();
         Optional<List<WorkshopA>> workshopAList = workshopService.getWorkshopAList(id);
         if(workshopAList.isPresent()){
             return ResponseEntity.ok(Response.success(workshopAList.get()));

@@ -52,12 +52,12 @@ public class WorkshopService {
         List<WorkshopA> result = null;
         result = workshopDao.getWorkshopAList(id);
         log.debug("result_first={}", result);
-        try {
-            Thread.sleep(10*1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        result = workshopDao.getWorkshopAList(id);
+//        try {
+//            Thread.sleep(10*1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        result = workshopDao.getWorkshopAList(id);
         log.debug("result_second={}", result);
         return Optional.ofNullable(result);
     }
