@@ -1,11 +1,13 @@
 package com.icd.wksh.services;
 
 import com.icd.wksh.daos.WorkshopDao;
+import com.icd.wksh.exceptions.BadRequestException;
 import com.icd.wksh.models.WorkshopA;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -23,8 +25,6 @@ public class WorkshopService {
     @Autowired
     private WorkshopDao workshopDao;
 
-
-
     @Transactional( value = "msTransaction", propagation = Propagation.REQUIRED)
     public int insert(WorkshopA object){
         try {
@@ -34,7 +34,7 @@ public class WorkshopService {
         }
         int row = 0;
         row += workshopBService.insertWorkshopA(object);
-        row += workshopBService.insertWorkshopB(object);
+//        row += workshopBService.insertWorkshopB(object);
         return row;
     }
 
@@ -46,9 +46,20 @@ public class WorkshopService {
         return row;
     }
 
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Optional<List<WorkshopA>> getWorkshopAList(BigDecimal id){
         log.debug("service: getWorkshopAList: object={}",id);
-        return Optional.ofNullable(workshopDao.getWorkshopAList(id));
+        List<WorkshopA> result = null;
+        result = workshopDao.getWorkshopAList(id);
+        log.debug("result_first={}", result);
+        try {
+            Thread.sleep(10*1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        result = workshopDao.getWorkshopAList(id);
+        log.debug("result_second={}", result);
+        return Optional.ofNullable(result);
     }
 
     public int updateWorkshop(WorkshopA object,BigDecimal id){

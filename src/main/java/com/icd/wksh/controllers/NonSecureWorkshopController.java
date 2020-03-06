@@ -26,7 +26,7 @@ public class NonSecureWorkshopController {
     private WorkshopService workshopService;
 
     @GetMapping
-    public ResponseEntity getWorkshopAList(@RequestParam("id") BigDecimal id){
+    public ResponseEntity getWorkshopAList(@RequestParam(value = "id", required = false) BigDecimal id){
         Optional<List<WorkshopA>> workshopAList = workshopService.getWorkshopAList(id);
         if(workshopAList.isPresent()){
             return ResponseEntity.ok(Response.success(workshopAList.get()));
@@ -35,7 +35,7 @@ public class NonSecureWorkshopController {
         }
     }
     @PostMapping
-    public ResponseEntity insertBook(@RequestBody WorkshopA body){
+    public ResponseEntity insertBook(@RequestBody WorkshopA body) throws RuntimeException {
         log.debug("controller: insertBook: body={}",body);
         int rowEffected = workshopService.insert(body);
         if(rowEffected > 0){

@@ -23,7 +23,7 @@ public class WorkshopBService {
     @Autowired
     private WorkshopDao workshopDao;
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
+    @Transactional(propagation = Propagation.REQUIRED)
     public int insertWorkshopA(WorkshopA object){
         try {
             log.debug("start transaction name={}",TransactionSynchronizationManager.getCurrentTransactionName());
@@ -33,6 +33,15 @@ public class WorkshopBService {
         log.debug("service: insertWorkshopA: object={}",object);
         int row = 0;
         row += workshopDao.insertWorkshopA(object);
+//        try {
+//            Thread.sleep(15*1000);
+//        } catch (InterruptedException e) {
+//            log.error("InterruptedException", e);
+//        }
+//        if(true){
+//            log.error("Throws Bad request");
+//            throw new BadRequestException("Very bad");
+//        }
         return row;
     }
 
