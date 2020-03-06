@@ -27,7 +27,7 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/categories")
-    @PreAuthorize("hasAuthority('ADMIN:READ')")
+    @PreAuthorize("hasAuthority('BOOK:READ')")
     public ResponseEntity getCategories(HttpServletRequest request){
         log.debug("controller: getCategories:");
         String message = (String)request.getAttribute(Constant.MESSAGE);
@@ -42,7 +42,7 @@ public class BookController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN:READ')")
+    @PreAuthorize("hasAuthority('BOOK:READ')")
     public ResponseEntity getBooks(){
         log.debug("controller: getBooks:");
         Optional<List<Book>> books = bookService.getBooks();
@@ -55,7 +55,7 @@ public class BookController {
     }
 
     @GetMapping("/{bookId}")
-    @PreAuthorize("hasAuthority('ADMIN:READ')")
+    @PreAuthorize("hasAuthority('BOOK:READ')")
     public ResponseEntity getBooksById(@PathVariable String bookId){
         log.debug("controller: getBooksById:");
         BigDecimal bookIdVal = null;
@@ -75,7 +75,7 @@ public class BookController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN:WRITE')")
+    @PreAuthorize("hasAuthority('BOOK:WRITE')")
     public ResponseEntity insertBook(@RequestBody BookRequest body){
         log.debug("controller: insertBook: body={}",body);
         int rowEffected = bookService.insertBook(body);
@@ -106,7 +106,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{bookId}")
-    @PreAuthorize("hasAuthority('ADMIN:WRITE')")
+    @PreAuthorize("hasAuthority('BOOK:WRITE')")
     public ResponseEntity deleteBook(@PathVariable String bookId){
         log.debug("controller: deleteBook: bookId={}",bookId);
         BigDecimal bookIdVal = null;
