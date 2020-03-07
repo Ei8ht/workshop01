@@ -64,15 +64,18 @@ public class FileController {
 
     @PostMapping("/uploads")
     @PreAuthorize("hasAnyAuthority('ADMIN:WRITE')")
-    public ResponseEntity uploadFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity uploadFile(HttpServletRequest request, @RequestParam("files") MultipartFile[] files) throws IOException {
         log.debug("controller: uploadFile");
         String username = (String) request.getAttribute(Constant.USERNAME);
         log.debug("username={}",username);
-        log.debug("file={}",file.getOriginalFilename());
-        List<String> eachLine = IOUtils.readLines(file.getInputStream(), "UTF-16");
-        eachLine.forEach(line -> {
-            log.debug(line);
-        });
-        return ResponseEntity.ok(Response.success(file.getOriginalFilename()));
+        for(MultipartFile file : files) {
+            log.debug("files={}", file.getOriginalFilename());
+
+            List<String> eachLine = IOUtils.readLines(file.getInputStream(), "UTF-8");
+            eachLine.forEach(line -> {
+                log.debug(line);
+            });
+        }
+        return ResponseEntity.ok(Response.success(files[0].getOriginalFilename()));
     }
 }
