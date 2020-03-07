@@ -19,8 +19,8 @@ public class HelloController {
 //    @PreAuthorize("hasAuthority('ADMIN:READ')")
     public ResponseEntity getMessage(@RequestParam("message") String message){
         log.debug("controller: getMessage: {}",message);
-        if(true)
-            throw new CustomException("Custom error ja");
+//        if(true)
+//            throw new CustomException("Custom error ja");
         return ResponseEntity.ok("Hello "+message);
     }
 }

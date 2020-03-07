@@ -19,9 +19,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WorkShop01Application {
 	private static final Logger log = LoggerFactory.getLogger(HelloController.class);
 
-	@Autowired
-	@Qualifier("Canon1")
-	private Printer printer;
+//	@Autowired
+//	@Qualifier("Canon1")
+//	private Printer printer;
+
+//	@Autowired
+//	private PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
 		ConfigurableApplicationContext context = SpringApplication.run(WorkShop01Application.class, args);
@@ -34,6 +37,9 @@ public class WorkShop01Application {
 //		log.debug("admin: {}", admin);
 //		HelloController printer = context.getBean(HelloController.class);
 //		printer.test();
+//		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//		String passwordHash = passwordEncoder.encode("sdasdasdasdasd");
+//		log.debug("passwordHash= {}",passwordHash);
 	}
 
 }

@@ -15,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,6 +29,8 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping("/signin")
     public ResponseEntity signIn(@RequestBody LoginRequest loginRequest) {
@@ -59,5 +62,9 @@ public class AuthController {
         }
         log.debug("username: {} authenticate passed !",username);
         return true;
+    }
+
+    private boolean match(String nonHash, String hashPassword){
+        return passwordEncoder.matches(nonHash, hashPassword);
     }
 }
