@@ -3,6 +3,7 @@ package com.icd.wksh.controllers;
 import com.icd.wksh.commons.Response;
 import com.icd.wksh.configs.Printer;
 import com.icd.wksh.models.WorkshopA;
+import com.icd.wksh.services.WorkshopService;
 import com.icd.wksh.services.WorkshopTransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,9 @@ import java.util.Optional;
 public class NonSecureWorkshopController {
     private static final Logger log = LoggerFactory.getLogger(NonSecureWorkshopController.class);
     @Autowired
-    private WorkshopTransactionService workshopService;
+    private WorkshopService workshopService;
+    @Autowired
+    private WorkshopTransactionService workshopTransactionService;
     @Autowired
     @Qualifier("Brother1")
     private Printer printer;
@@ -39,7 +42,7 @@ public class NonSecureWorkshopController {
     @PostMapping
     public ResponseEntity insertBook(@RequestBody WorkshopA body) throws RuntimeException {
         log.debug("controller: insertBook: body={}",body);
-        int rowEffected = workshopService.insert(body);
+        int rowEffected = workshopTransactionService.insert(body);
         if(rowEffected > 0){
             return ResponseEntity.ok(Response.success(rowEffected+" row effected"));
         } else {

@@ -7,4 +7,5 @@ public class Constant {
     public static String SUCCESS = "SUCCESS";
     public static String ERROR = "ERROR";
     public static String TIMESTAMP = "timestamp";
+    public static String USERNAME = "username";
 }
