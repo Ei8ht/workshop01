@@ -100,7 +100,7 @@ public class UserDao {
         param.add(object.getSurename());
         statement.append(" ? , ");
         param.add(object.getRoleId());
-        statement.append(" true , ");
+        statement.append(" 'A' , ");
         statement.append(" NOW() , ");
         statement.append(" ? , ");
         param.add(username);
