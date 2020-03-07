@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,11 +42,14 @@ public class FileController {
         String username = (String) request.getAttribute(Constant.USERNAME);
         log.debug("username={}",username);
 
-        log.debug("fileName={}",pdfResource.getFile().getAbsolutePath());
-
-        byte[] dataByte = IOUtils.toByteArray(pdfResource.getInputStream());
+        // ====== get File from configs resource Example ======
+//        log.debug("fileName={}",pdfResource.getFile().getAbsolutePath());
+//        byte[] dataByte = IOUtils.toByteArray(pdfResource.getInputStream());
+        Path path = Paths.get("D:\\spring_resource\\IntelliJKeyMap2.pdf");
+        byte[] dataByte = Files.readAllBytes(path);
         HttpHeaders header = new HttpHeaders();
-        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+pdfResource.getFilename());
+//        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+pdfResource.getFilename());
+        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+path.getFileName().toString());
         header.add("Cache-Control", "no-cache, no-store, must-revalidate");
         header.add("Pragma", "no-cache");
         header.add("Expires", "0");
