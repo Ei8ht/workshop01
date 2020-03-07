@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -59,5 +60,19 @@ public class FileController {
                 .contentLength(dataByte.length)
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(dataByte);
+    }
+
+    @PostMapping("/uploads")
+    @PreAuthorize("hasAnyAuthority('ADMIN:WRITE')")
+    public ResponseEntity uploadFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws IOException {
+        log.debug("controller: uploadFile");
+        String username = (String) request.getAttribute(Constant.USERNAME);
+        log.debug("username={}",username);
+        log.debug("file={}",file.getOriginalFilename());
+        List<String> eachLine = IOUtils.readLines(file.getInputStream(), "UTF-16");
+        eachLine.forEach(line -> {
+            log.debug(line);
+        });
+        return ResponseEntity.ok(Response.success(file.getOriginalFilename()));
     }
 }
