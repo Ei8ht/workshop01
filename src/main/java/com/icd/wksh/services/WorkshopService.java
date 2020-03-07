@@ -1,7 +1,6 @@
 package com.icd.wksh.services;
 
 import com.icd.wksh.daos.WorkshopDao;
-import com.icd.wksh.exceptions.BadRequestException;
 import com.icd.wksh.models.WorkshopA;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,28 +19,23 @@ import java.util.Optional;
 public class WorkshopService {
     private static final Logger log = LoggerFactory.getLogger(WorkshopService.class);
     @Autowired
-    private WorkshopBService workshopBService;
-    @Autowired
     private WorkshopDao workshopDao;
 
-    @Transactional( value = "msTransaction", propagation = Propagation.REQUIRED)
-    public int insert(WorkshopA object){
-        try {
-            log.debug("start transaction name={}", TransactionSynchronizationManager.getCurrentTransactionName());
-        } catch (Exception e){
-            log.debug("not found transaction");
-        }
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int insertWorkshopA(WorkshopA object){
+        log.debug("start transaction name={}",TransactionSynchronizationManager.getCurrentTransactionName());
+        log.debug("service: insertWorkshopA: object={}",object);
         int row = 0;
-        row += workshopBService.insertWorkshopA(object);
-//        row += workshopBService.insertWorkshopB(object);
+        row += workshopDao.insertWorkshopA(object);
         return row;
     }
 
-    @Transactional( value = "msTransaction", propagation = Propagation.REQUIRED)
-    public int insertWorkshop(WorkshopA object){
-        log.debug("service: insertWorkshop: object={}",object);
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public int insertWorkshopB(WorkshopA object){
+        log.debug("start transaction name={}",TransactionSynchronizationManager.getCurrentTransactionName());
+        log.debug("service: insertWorkshopB: object={}",object);
         int row = 0;
-        row += workshopDao.insertWorkshopA(object);
+        row += workshopDao.insertWorkshopB(object);
         return row;
     }
 
@@ -51,14 +44,6 @@ public class WorkshopService {
         log.debug("service: getWorkshopAList: object={}",id);
         List<WorkshopA> result = null;
         result = workshopDao.getWorkshopAList(id);
-        log.debug("result_first={}", result);
-//        try {
-//            Thread.sleep(10*1000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        result = workshopDao.getWorkshopAList(id);
-        log.debug("result_second={}", result);
         return Optional.ofNullable(result);
     }
 

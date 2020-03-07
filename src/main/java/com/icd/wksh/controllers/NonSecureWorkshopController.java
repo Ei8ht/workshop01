@@ -2,13 +2,8 @@ package com.icd.wksh.controllers;
 
 import com.icd.wksh.commons.Response;
 import com.icd.wksh.configs.Printer;
-import com.icd.wksh.exceptions.BadRequestException;
-import com.icd.wksh.models.Book;
-import com.icd.wksh.models.Category;
 import com.icd.wksh.models.WorkshopA;
-import com.icd.wksh.payloads.BookRequest;
-import com.icd.wksh.services.BookService;
-import com.icd.wksh.services.WorkshopService;
+import com.icd.wksh.services.WorkshopTransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +20,7 @@ import java.util.Optional;
 public class NonSecureWorkshopController {
     private static final Logger log = LoggerFactory.getLogger(NonSecureWorkshopController.class);
     @Autowired
-    private WorkshopService workshopService;
+    private WorkshopTransactionService workshopService;
     @Autowired
     @Qualifier("Brother1")
     private Printer printer;
