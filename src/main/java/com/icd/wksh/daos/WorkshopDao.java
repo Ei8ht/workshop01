@@ -8,6 +8,7 @@ import com.icd.wksh.payloads.BookRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,8 +18,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,6 +75,46 @@ public class WorkshopDao {
 
         log.debug("statement: {}",statement.toString());
         rows = jdbcTemplate.update(statement.toString(), param.toArray());
+        log.debug("rows: " + rows);
+        return rows;
+    }
+
+    public int insertWorkshopA(final List<WorkshopA> objects){
+        log.debug("call: insertWorkshopA: objects={}",objects);
+        StringBuilder statement = new StringBuilder();
+        List<Object> param = new ArrayList<>();
+        int rows = 0;
+        statement.append(" INSERT INTO `icd-workshop-01-db`.`workshop_a` ");
+        statement.append(" ( `id` ,");
+        statement.append(" `value1`, ");
+        statement.append(" `value2`) ");
+        statement.append(" VALUES ");
+        statement.append(" ( ");
+        statement.append(" ? , ");
+        statement.append(" ? , ");
+        statement.append(" ? ) ");
+
+        log.debug("statement: {}",statement.toString());
+        int[] batchEffected = jdbcTemplate.batchUpdate(statement.toString(), new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                WorkshopA object = objects.get(i);
+                int objIndex = 1;
+                ps.setBigDecimal(objIndex++, object.getId());
+                ps.setString(objIndex++, object.getValue1());
+                ps.setString(objIndex++, object.getValue2());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return objects.size();
+            }
+        });
+        if(batchEffected != null && batchEffected.length >0){
+            for(int rowEffected : batchEffected){
+                rows += rowEffected;
+            }
+        }
         log.debug("rows: " + rows);
         return rows;
     }

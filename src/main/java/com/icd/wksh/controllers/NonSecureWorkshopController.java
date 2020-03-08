@@ -39,6 +39,18 @@ public class NonSecureWorkshopController {
             return ResponseEntity.ok(Response.fail("Not found anything"));
         }
     }
+
+    @PostMapping("/batch")
+    public ResponseEntity insertBookBatch(@RequestBody List<WorkshopA> body) throws RuntimeException {
+        log.debug("controller: insertBookBatch: body={}",body);
+        int rowEffected = workshopService.insertWorkshopA(body);
+        if(rowEffected > 0){
+            return ResponseEntity.ok(Response.success(rowEffected+" row effected"));
+        } else {
+            return ResponseEntity.ok(Response.fail("0 row effected"));
+        }
+    }
+
     @PostMapping
     public ResponseEntity insertBook(@RequestBody WorkshopA body) throws RuntimeException {
         log.debug("controller: insertBook: body={}",body);
@@ -49,6 +61,7 @@ public class NonSecureWorkshopController {
             return ResponseEntity.ok(Response.fail("0 row effected"));
         }
     }
+
     @PutMapping("/{id}")
     public ResponseEntity updateWorkshop(@PathVariable("id") BigDecimal id,@RequestBody WorkshopA body){
         log.debug("controller: updateWorkshop: body={}",body);

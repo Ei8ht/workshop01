@@ -30,6 +30,15 @@ public class WorkshopService {
         return row;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int insertWorkshopA(List<WorkshopA> objects){
+        log.debug("start transaction name={}",TransactionSynchronizationManager.getCurrentTransactionName());
+        log.debug("service: insertWorkshopA: objects={}",objects);
+        int row = 0;
+        row += workshopDao.insertWorkshopA(objects);
+        return row;
+    }
+
     @Transactional(propagation = Propagation.SUPPORTS)
     public int insertWorkshopB(WorkshopA object){
         log.debug("start transaction name={}",TransactionSynchronizationManager.getCurrentTransactionName());
