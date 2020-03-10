@@ -1,7 +1,6 @@
 package com.icd.wksh.controllers;
 
 import com.icd.wksh.commons.Response;
-import com.icd.wksh.configs.Printer;
 import com.icd.wksh.models.WorkshopA;
 import com.icd.wksh.services.WorkshopService;
 import com.icd.wksh.services.WorkshopTransactionService;
@@ -24,14 +23,10 @@ public class NonSecureWorkshopController {
     private WorkshopService workshopService;
     @Autowired
     private WorkshopTransactionService workshopTransactionService;
-    @Autowired
-    @Qualifier("Brother1")
-    private Printer printer;
 
 
     @GetMapping
     public ResponseEntity getWorkshopAList(@RequestParam(value = "id", required = false) BigDecimal id){
-        printer.print();
         Optional<List<WorkshopA>> workshopAList = workshopService.getWorkshopAList(id);
         if(workshopAList.isPresent()){
             return ResponseEntity.ok(Response.success(workshopAList.get()));

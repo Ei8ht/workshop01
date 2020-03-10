@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
@@ -20,6 +22,11 @@ public class UserService {
     public int insertUser(User object,String username){
         log.debug("service: insertUser: object={}, username={}",object,username);
         return userDao.insertUser(object,username);
+    }
+
+    public int insertUserList(List<User> objects, String username){
+        log.debug("service: insertUserList: objects={}, username={}",objects,username);
+        return userDao.insertUserList(objects,username);
     }
 
 }

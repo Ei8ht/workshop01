@@ -37,7 +37,7 @@ public class FileController {
     private Resource pdfResource;
 
     @GetMapping("/downloads")
-    @PreAuthorize("hasAnyAuthority('BOOK:READ,ADMIN:READ')")
+//    @PreAuthorize("hasAnyAuthority('BOOK:READ,ADMIN:READ')")
     public ResponseEntity getDownloadFile(HttpServletRequest request) throws IOException {
         log.debug("controller: getDownloadFile");
         String username = (String) request.getAttribute(Constant.USERNAME);
