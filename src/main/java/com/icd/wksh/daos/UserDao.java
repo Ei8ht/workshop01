@@ -8,12 +8,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,6 +113,64 @@ public class UserDao {
 
         log.debug("statement: {}",statement.toString());
         rows = jdbcTemplate.update(statement.toString(), param.toArray());
+        log.debug("rows: " + rows);
+        return rows;
+    }
+
+    public int insertUserList(List<User> objects, String username){
+        log.debug("call: insertWorkshopB: objects={}",objects);
+        StringBuilder statement = new StringBuilder();
+        List<Object> param = new ArrayList<>();
+        int rows = 0;
+        statement.append(" INSERT INTO `icd-workshop-01-db`.`user` ");
+        statement.append(" (`user_id`, ");
+        statement.append(" `password`, ");
+        statement.append(" `name`, ");
+        statement.append(" `surename`, ");
+        statement.append(" `role_id`, ");
+        statement.append(" `active_flag`, ");
+        statement.append(" `create_date`, ");
+        statement.append(" `create_by`, ");
+        statement.append(" `update_date`, ");
+        statement.append(" `update_by`) ");
+        statement.append(" VALUES ");
+        statement.append(" ( ? , ");
+        statement.append(" ? , ");
+        statement.append(" ? , ");
+        statement.append(" ? , ");
+        statement.append(" ? , ");
+        statement.append(" 'A' , ");
+        statement.append(" NOW() , ");
+        statement.append(" ? , ");
+        statement.append(" NOW() , ");
+        statement.append(" ? ); ");
+
+
+        log.debug("statement: {}",statement.toString());
+        int[] rowsEffected = jdbcTemplate.batchUpdate(statement.toString(), new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                User object = objects.get(i);
+                int objIndex = 1;
+                ps.setString(objIndex++, object.getUserId());//param.add(object.getUserId());
+                ps.setString(objIndex++, encoder.encode(object.getPassword()));//param.add(encoder.encode(object.getPassword()));
+                ps.setString(objIndex++, object.getName());//param.add(object.getName());
+                ps.setString(objIndex++, object.getSurename());//param.add(object.getSurename());
+                ps.setBigDecimal(objIndex++, object.getRoleId());//param.add(object.getRoleId());
+                ps.setString(objIndex++, username);//param.add(username);
+                ps.setString(objIndex++, username);//param.add(username);
+            }
+
+            @Override
+            public int getBatchSize() {
+                return objects.size();
+            }
+        });
+        if(Util.isNotEmpty(rowsEffected)){
+            for(int row : rowsEffected){
+                rows += row;
+            }
+        }
         log.debug("rows: " + rows);
         return rows;
     }
