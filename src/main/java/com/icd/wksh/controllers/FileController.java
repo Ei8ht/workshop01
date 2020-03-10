@@ -44,13 +44,13 @@ public class FileController {
         log.debug("username={}",username);
 
         // ====== get File from configs resource Example ======
-//        log.debug("fileName={}",pdfResource.getFile().getAbsolutePath());
-//        byte[] dataByte = IOUtils.toByteArray(pdfResource.getInputStream());
-        Path path = Paths.get("D:\\spring_resource\\IntelliJKeyMap2.pdf");
-        byte[] dataByte = Files.readAllBytes(path);
+        log.debug("fileName={}",pdfResource.getFile().getAbsolutePath());
+        byte[] dataByte = IOUtils.toByteArray(pdfResource.getInputStream());
+//        Path path = Paths.get("D:\\spring_resource\\IntelliJKeyMap2.pdf");
+//        byte[] dataByte = Files.readAllBytes(path);
         HttpHeaders header = new HttpHeaders();
-//        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+pdfResource.getFilename());
-        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+path.getFileName().toString());
+        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+pdfResource.getFilename());
+//        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+path.getFileName().toString());
         header.add("Cache-Control", "no-cache, no-store, must-revalidate");
         header.add("Pragma", "no-cache");
         header.add("Expires", "0");
