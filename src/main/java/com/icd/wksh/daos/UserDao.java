@@ -29,7 +29,7 @@ public class UserDao {
     private PasswordEncoder encoder;
 
     public User getUserByUsername(String username) {
-        log.debug("call: getUserByUsername");
+        log.debug("dao: getUserByUsername");
         StringBuilder statement = new StringBuilder();
         List<User> resultList = null;
         User result = null;
@@ -58,8 +58,47 @@ public class UserDao {
         return result;
     }
 
+    public Integer countUsers() {
+        log.debug("dao: countUsers");
+        StringBuilder statement = new StringBuilder();
+        Integer result = null;
+        List<Object> param = new ArrayList<>();
+        statement.append(" SELECT COUNT(*) FROM `icd-workshop-01-db`.user ");
+
+        log.debug("statement: {}", statement.toString());
+        result = jdbcTemplate.queryForObject(statement.toString(), param.toArray(), Integer.class);
+        return result;
+    }
+
+    public List<User> getUsers(int limit,int offset) {
+        log.debug("dao: getUsers: limit={}, offset={}", limit, offset);
+        StringBuilder statement = new StringBuilder();
+        List<User> resultList = null;
+        User result = null;
+        List<Object> param = new ArrayList<>();
+        statement.append(" SELECT `user`.`user_id`, ");
+        statement.append("     `user`.`password`, ");
+        statement.append("     `user`.`name`, ");
+        statement.append("     `user`.`surename`, ");
+        statement.append("     `user`.`role_id`, ");
+        statement.append("     `user`.`active_flag`, ");
+        statement.append("     `user`.`create_date`, ");
+        statement.append("     `user`.`create_by`, ");
+        statement.append("     `user`.`update_date`, ");
+        statement.append("     `user`.`update_by` ");
+        statement.append(" FROM `icd-workshop-01-db`.`user` ");
+        statement.append(" ORDER BY `user`.`create_date` ");
+        statement.append(" LIMIT ? OFFSET ? ");
+        param.add(limit);
+        param.add(offset);
+
+        log.debug("statement: {}", statement.toString());
+        resultList = jdbcTemplate.query(statement.toString(), param.toArray(), new BeanPropertyRowMapper<>(User.class));
+        return resultList;
+    }
+
     public List<RolePermission> getPermissionByRoleId(BigDecimal roleId) {
-        log.debug("call: getUserByUsername");
+        log.debug("dao: getUserByUsername");
         StringBuilder statement = new StringBuilder();
         List<RolePermission> resultList = null;
         List<Object> param = new ArrayList<>();
@@ -77,7 +116,7 @@ public class UserDao {
     }
 
     public int insertUser(User object, String username){
-        log.debug("call: insertWorkshopB: object={}",object);
+        log.debug("dao: insertWorkshopB: object={}",object);
         StringBuilder statement = new StringBuilder();
         List<Object> param = new ArrayList<>();
         int rows = 0;
@@ -118,7 +157,7 @@ public class UserDao {
     }
 
     public int insertUserList(List<User> objects, String username){
-        log.debug("call: insertWorkshopB: objects={}",objects);
+        log.debug("dao: insertWorkshopB: objects={}",objects);
         StringBuilder statement = new StringBuilder();
         List<Object> param = new ArrayList<>();
         int rows = 0;

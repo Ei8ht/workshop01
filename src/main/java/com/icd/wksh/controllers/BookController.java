@@ -30,7 +30,7 @@ public class BookController {
     @PreAuthorize("hasAuthority('BOOK:READ')")
     public ResponseEntity getCategories(HttpServletRequest request){
         log.debug("controller: getCategories:");
-        String message = (String)request.getAttribute(Constant.MESSAGE);
+        String message = (String)request.getAttribute(Constant.USERNAME);
         log.debug("message={}",message);
         Optional<List<Category>> categories = bookService.getCategories();
         log.debug("categories: {}",categories);

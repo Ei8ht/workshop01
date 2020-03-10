@@ -2,6 +2,7 @@ package com.icd.wksh.services;
 
 import com.icd.wksh.daos.UserDao;
 import com.icd.wksh.models.User;
+import com.icd.wksh.payloads.GetUsersResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,18 @@ public class UserService {
     public int insertUserList(List<User> objects, String username){
         log.debug("service: insertUserList: objects={}, username={}",objects,username);
         return userDao.insertUserList(objects,username);
+    }
+
+    public GetUsersResponse getUsersResponse(int pageIndex,int pageSize, String username){
+        log.debug("service: getUsersResponse: pageIndex={}, pageSize={}, username={}",pageIndex,pageSize,username);
+        GetUsersResponse response = new GetUsersResponse();
+        response.setTotalRecord(userDao.countUsers());
+        response.setUserList(userDao.getUsers(pageSize, getOffset(pageIndex, pageSize)));
+        return response;
+    }
+
+    private int getOffset(int pageIndex,int pageSize){
+        return ( pageIndex-1 ) * pageSize;
     }
 
 }
