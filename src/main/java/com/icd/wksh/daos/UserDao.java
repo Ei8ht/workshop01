@@ -98,7 +98,7 @@ public class UserDao {
     }
 
     public List<RolePermission> getPermissionByRoleId(BigDecimal roleId) {
-        log.debug("dao: getUserByUsername");
+        log.debug("dao: getPermissionByRoleId");
         StringBuilder statement = new StringBuilder();
         List<RolePermission> resultList = null;
         List<Object> param = new ArrayList<>();
@@ -116,7 +116,7 @@ public class UserDao {
     }
 
     public int insertUser(User object, String username){
-        log.debug("dao: insertWorkshopB: object={}",object);
+        log.debug("dao: insertUser: object={}",object);
         StringBuilder statement = new StringBuilder();
         List<Object> param = new ArrayList<>();
         int rows = 0;
@@ -149,6 +149,50 @@ public class UserDao {
         statement.append(" NOW() , ");
         statement.append(" ? ); ");
         param.add(username);
+
+        log.debug("statement: {}",statement.toString());
+        rows = jdbcTemplate.update(statement.toString(), param.toArray());
+        log.debug("rows: " + rows);
+        return rows;
+    }
+
+    public int updateUser(User object, String username){
+        log.debug("dao: updateUser: object={}",object);
+        StringBuilder statement = new StringBuilder();
+        List<Object> param = new ArrayList<>();
+        int rows = 0;
+        statement.append(" UPDATE `icd-workshop-01-db`.`user` ");
+        statement.append(" SET ");
+        statement.append(" `password` = ?, ");
+        param.add(encoder.encode(object.getPassword()));
+        statement.append(" `name` = ? , ");
+        param.add(object.getName());
+        statement.append(" `surename` = ? , ");
+        param.add(object.getSurename());
+        statement.append(" `role_id` = ? , ");
+        param.add(object.getRoleId());
+        statement.append(" `active_flag` = ? , ");
+        param.add(object.getActiveFlag());
+        statement.append(" `update_date` = NOW(), ");
+        statement.append(" `update_by` = ? ");
+        param.add(username);
+        statement.append(" WHERE `user_id` = <{user_id: }> ");
+        param.add(object.getUserId());
+
+        log.debug("statement: {}",statement.toString());
+        rows = jdbcTemplate.update(statement.toString(), param.toArray());
+        log.debug("rows: " + rows);
+        return rows;
+    }
+
+    public int deleteUser(String userId){
+        log.debug("dao: deleteUser: userId={}",userId);
+        StringBuilder statement = new StringBuilder();
+        List<Object> param = new ArrayList<>();
+        int rows = 0;
+        statement.append(" DELETE FROM `icd-workshop-01-db`.`user` ");
+        statement.append(" WHERE `user_id` = ? ");
+        param.add(userId);
 
         log.debug("statement: {}",statement.toString());
         rows = jdbcTemplate.update(statement.toString(), param.toArray());

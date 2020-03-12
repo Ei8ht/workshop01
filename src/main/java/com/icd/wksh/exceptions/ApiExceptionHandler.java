@@ -5,9 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.IllegalTransactionStateException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDateTime;
 
 @ControllerAdvice
@@ -17,6 +19,6 @@ public class ApiExceptionHandler {
     public ResponseEntity<?> handleRequestException(RuntimeException e){
         CustomExceptionObject object = new CustomExceptionObject("Fail", e.getMessage(), LocalDateTime.now());
         log.error("Error", e);
-        return new ResponseEntity<>(object, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(object, HttpStatus.BAD_GATEWAY);
     }
 }

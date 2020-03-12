@@ -30,6 +30,16 @@ public class UserService {
         return userDao.insertUserList(objects,username);
     }
 
+    public int updateUser(User user, String username){
+        log.debug("service: updateUser: user={}, username={}",user,username);
+        return userDao.updateUser(user,username);
+    }
+
+    public int deleteUser(String userId){
+        log.debug("service: updateUser: userId={}",userId);
+        return userDao.deleteUser(userId);
+    }
+
     public GetUsersResponse getUsersResponse(int pageIndex,int pageSize, String username){
         log.debug("service: getUsersResponse: pageIndex={}, pageSize={}, username={}",pageIndex,pageSize,username);
         GetUsersResponse response = new GetUsersResponse();

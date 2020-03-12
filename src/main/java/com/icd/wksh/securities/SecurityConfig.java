@@ -36,13 +36,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and()
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
 //                .addFilterAfter(customRequestFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .exceptionHandling().accessDeniedHandler(customAccessDenyHandler).and()
+//                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+//                .exceptionHandling().accessDeniedHandler(customAccessDenyHandler).and()
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/hello/**").permitAll()
                 .antMatchers("/not-secure/**").permitAll()
                 .antMatchers("/files/**").permitAll()
+                .antMatchers("/users/**").permitAll()
                 .antMatchers(
                         "/v2/api-docs",           // swagger
                         "/webjars/**",            // swagger-ui webjars

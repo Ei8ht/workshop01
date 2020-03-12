@@ -21,9 +21,12 @@ public class WorkshopService {
     @Autowired
     private WorkshopDao workshopDao;
 
+    @Autowired
+    private WorkshopService self;
+
     @Transactional(propagation = Propagation.REQUIRED)
     public int insertWorkshopA(WorkshopA object){
-        log.debug("start transaction name={}",TransactionSynchronizationManager.getCurrentTransactionName());
+        log.debug("//====================== transaction name={} ======================//",TransactionSynchronizationManager.getCurrentTransactionName());
         log.debug("service: insertWorkshopA: object={}",object);
         int row = 0;
         row += workshopDao.insertWorkshopA(object);
@@ -32,16 +35,16 @@ public class WorkshopService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public int insertWorkshopA(List<WorkshopA> objects){
-        log.debug("start transaction name={}",TransactionSynchronizationManager.getCurrentTransactionName());
+        log.debug("//====================== transaction name={} ======================//",TransactionSynchronizationManager.getCurrentTransactionName());
         log.debug("service: insertWorkshopA: objects={}",objects);
         int row = 0;
         row += workshopDao.insertWorkshopA(objects);
         return row;
     }
 
-    @Transactional(propagation = Propagation.SUPPORTS)
+    @Transactional(propagation = Propagation.MANDATORY)
     public int insertWorkshopB(WorkshopA object){
-        log.debug("start transaction name={}",TransactionSynchronizationManager.getCurrentTransactionName());
+        log.debug("//====================== transaction name={} ======================//",TransactionSynchronizationManager.getCurrentTransactionName());
         log.debug("service: insertWorkshopB: object={}",object);
         int row = 0;
         row += workshopDao.insertWorkshopB(object);
@@ -64,5 +67,13 @@ public class WorkshopService {
     public int deleteWorkshop(BigDecimal id){
         log.debug("service: deleteWorkshop: id={}",id);
         return workshopDao.deleteWorkshop(id);
+    }
+
+//    @Transactional(propagation = Propagation.REQUIRED)
+    public int insertWorkshopObject(WorkshopA object){
+        int row = 0;
+        row += self.insertWorkshopA(object);
+        row += self.insertWorkshopB(object);
+        return row;
     }
 }

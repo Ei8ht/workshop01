@@ -36,8 +36,8 @@ public class NonSecureWorkshopController {
     }
 
     @PostMapping("/batch")
-    public ResponseEntity insertBookBatch(@RequestBody List<WorkshopA> body) throws RuntimeException {
-        log.debug("controller: insertBookBatch: body={}",body);
+    public ResponseEntity insertWorkshopA(@RequestBody List<WorkshopA> body) throws RuntimeException {
+        log.debug("controller: insertWorkshopA: body={}",body);
         int rowEffected = workshopService.insertWorkshopA(body);
         if(rowEffected > 0){
             return ResponseEntity.ok(Response.success(rowEffected+" row effected"));
@@ -47,9 +47,9 @@ public class NonSecureWorkshopController {
     }
 
     @PostMapping
-    public ResponseEntity insertBook(@RequestBody WorkshopA body) throws RuntimeException {
-        log.debug("controller: insertBook: body={}",body);
-        int rowEffected = workshopTransactionService.insert(body);
+    public ResponseEntity insertWorkshopObject(@RequestBody WorkshopA body) throws RuntimeException {
+        log.debug("controller: insertWorkshopObject: body={}",body);
+        int rowEffected = workshopService.insertWorkshopObject(body);
         if(rowEffected > 0){
             return ResponseEntity.ok(Response.success(rowEffected+" row effected"));
         } else {
