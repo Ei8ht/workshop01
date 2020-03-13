@@ -15,10 +15,18 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class ApiExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(WorkshopTransactionService.class);
+
     @ExceptionHandler(value = {CustomException.class})
     public ResponseEntity<?> handleRequestException(RuntimeException e){
         CustomExceptionObject object = new CustomExceptionObject("Fail", e.getMessage(), LocalDateTime.now());
         log.error("Error", e);
         return new ResponseEntity<>(object, HttpStatus.BAD_GATEWAY);
+    }
+
+    @ExceptionHandler(value = {NotFoundException.class})
+    public ResponseEntity<?> handleNotFoundException(RuntimeException e){
+        CustomExceptionObject object = new CustomExceptionObject("Request Fail", e.getMessage(), LocalDateTime.now());
+        log.error("Error", e);
+        return new ResponseEntity<>(object, HttpStatus.NOT_FOUND);
     }
 }

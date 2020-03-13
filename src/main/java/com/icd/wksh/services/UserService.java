@@ -25,6 +25,11 @@ public class UserService {
         return userDao.insertUser(object,username);
     }
 
+    public User getUserByUsername(String username){
+        log.debug("service: getUserByUsername: username={}",username);
+        return userDao.getUserByUsername(username);
+    }
+
     public int insertUserList(List<User> objects, String username){
         log.debug("service: insertUserList: objects={}, username={}",objects,username);
         return userDao.insertUserList(objects,username);

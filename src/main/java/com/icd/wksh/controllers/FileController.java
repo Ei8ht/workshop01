@@ -63,7 +63,7 @@ public class FileController {
     }
 
     @PostMapping("/uploads")
-    @PreAuthorize("hasAnyAuthority('ADMIN:WRITE')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN:WRITE')")
     public ResponseEntity uploadFile(HttpServletRequest request, @RequestParam("files") MultipartFile[] files) throws IOException {
         log.debug("controller: uploadFile");
         String username = (String) request.getAttribute(Constant.USERNAME);
