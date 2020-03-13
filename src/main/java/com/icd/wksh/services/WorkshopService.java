@@ -51,7 +51,7 @@ public class WorkshopService {
         return row;
     }
 
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
     public Optional<List<WorkshopA>> getWorkshopAList(BigDecimal id){
         log.debug("service: getWorkshopAList: object={}",id);
         List<WorkshopA> result = null;
@@ -59,9 +59,18 @@ public class WorkshopService {
         return Optional.ofNullable(result);
     }
 
-    public int updateWorkshop(WorkshopA object,BigDecimal id){
+    @Transactional
+    public int updateWorkshop(WorkshopA object,BigDecimal id) {
         log.debug("service: updateWorkshop: object={}, id={}",object, id);
-        return workshopDao.updateWorkshop(object, id);
+        int row = workshopDao.updateWorkshop(object, id);
+        try {
+            Thread.sleep(30*1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if(true)
+            throw new RuntimeException("Test exception");
+        return row;
     }
 
     public int deleteWorkshop(BigDecimal id){
