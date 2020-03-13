@@ -24,9 +24,9 @@ public class WorkshopService {
     @Autowired
     private WorkshopService self;
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.MANDATORY)
     public int insertWorkshopA(WorkshopA object){
-        log.debug("//====================== transaction name={} ======================//",TransactionSynchronizationManager.getCurrentTransactionName());
+        log.debug("//====================== {} ======================//",TransactionSynchronizationManager.getCurrentTransactionName());
         log.debug("service: insertWorkshopA: object={}",object);
         int row = 0;
         row += workshopDao.insertWorkshopA(object);
@@ -35,7 +35,7 @@ public class WorkshopService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public int insertWorkshopA(List<WorkshopA> objects){
-        log.debug("//====================== transaction name={} ======================//",TransactionSynchronizationManager.getCurrentTransactionName());
+        log.debug("//====================== {} ======================//",TransactionSynchronizationManager.getCurrentTransactionName());
         log.debug("service: insertWorkshopA: objects={}",objects);
         int row = 0;
         row += workshopDao.insertWorkshopA(objects);
@@ -44,7 +44,7 @@ public class WorkshopService {
 
     @Transactional(propagation = Propagation.MANDATORY)
     public int insertWorkshopB(WorkshopA object){
-        log.debug("//====================== transaction name={} ======================//",TransactionSynchronizationManager.getCurrentTransactionName());
+        log.debug("//====================== {} ======================//",TransactionSynchronizationManager.getCurrentTransactionName());
         log.debug("service: insertWorkshopB: object={}",object);
         int row = 0;
         row += workshopDao.insertWorkshopB(object);
@@ -69,8 +69,9 @@ public class WorkshopService {
         return workshopDao.deleteWorkshop(id);
     }
 
-//    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED)
     public int insertWorkshopObject(WorkshopA object){
+        log.debug("//====================== {} ======================//",TransactionSynchronizationManager.getCurrentTransactionName());
         int row = 0;
         row += self.insertWorkshopA(object);
         row += self.insertWorkshopB(object);
