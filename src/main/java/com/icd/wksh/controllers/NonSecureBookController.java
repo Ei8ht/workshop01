@@ -51,9 +51,9 @@ public class NonSecureBookController {
     @GetMapping("/{bookId}")
     public ResponseEntity getBooksById(@PathVariable String bookId){
         log.debug("controller: getBooksById:");
-        BigDecimal bookIdVal = null;
+        Long bookIdVal = null;
         try {
-            bookIdVal = new BigDecimal(bookId);
+            bookIdVal = new Long(bookId);
         } catch (Exception e){
             throw new BadRequestException("Invalid path_variable input");
         }

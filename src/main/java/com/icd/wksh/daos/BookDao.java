@@ -3,6 +3,7 @@ package com.icd.wksh.daos;
 import com.icd.wksh.commons.Util;
 import com.icd.wksh.models.Book;
 import com.icd.wksh.models.Category;
+import com.icd.wksh.models.User;
 import com.icd.wksh.payloads.BookRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +62,9 @@ public class BookDao {
         statement.append("     `book`.`author`, ");
         statement.append("     `book`.`year`, ");
         statement.append("     `book`.`category_id`, ");
-        statement.append("     `category`.`category_description` ");
+        statement.append("     `category`.`category_description`, ");
+        statement.append("     `book`.`image_id`, ");
+        statement.append("     `book`.`pdf_id` ");
         statement.append(" FROM `icd-workshop-01-db`.`book` ");
         statement.append(" LEFT JOIN `icd-workshop-01-db`.`category` ON `book`.`category_id` = `category`.`category_id` ");
         statement.append(" WHERE 1 = 1 ");
@@ -83,13 +86,15 @@ public class BookDao {
             @Override
             public Book mapRow(ResultSet rs, int i) throws SQLException {
                 Book book = new Book();
-                book.setBookId(rs.getBigDecimal("book_id"));//private BigDecimal bookId;//`book`.`book_id`,
+                book.setBookId(rs.getLong("book_id"));//private BigDecimal bookId;//`book`.`book_id`,
                 book.setIsbn(rs.getString("isbn"));//private String isbn;//`book`.`isbn`,
                 book.setTitle(rs.getString("title"));//private String title;//`book`.`title`,
                 book.setAuthor(rs.getString("author"));//private String author;//`book`.`author`,
                 book.setYear(rs.getString("year"));//private String year;//`book`.`year`,
-                book.setCategoryId(rs.getBigDecimal("category_id"));//private BigDecimal categoryId;//`book`.`category_id`
+                book.setCategoryId(rs.getLong("category_id"));//private BigDecimal categoryId;//`book`.`category_id`
 //                book.setCategoryDescription(rs.getString("category_description"));//private String categoryDescription;//category_description
+                book.setImageId(rs.getString("image_id"));
+                book.setPdfId(rs.getString("pdf_id"));
                 return book;
             }
         });
@@ -101,7 +106,7 @@ public class BookDao {
     }
 
     @Transactional
-    public List<Book> getBooksNamed(BigDecimal bookId) {
+    public List<Book> getBooksNamed(Long bookId) {
         log.debug("dao: getBooks: bookId={}",bookId);
         StringBuilder statement = new StringBuilder();
         List<Book> resultList = null;
@@ -112,7 +117,9 @@ public class BookDao {
         statement.append("     `book`.`author`, ");
         statement.append("     `book`.`year`, ");
         statement.append("     `book`.`category_id`, ");
-        statement.append("     `category`.`category_description` ");
+        statement.append("     `category`.`category_description`, ");
+        statement.append("     `book`.`image_id`, ");
+        statement.append("     `book`.`pdf_id` ");
         statement.append(" FROM `icd-workshop-01-db`.`book` ");
         statement.append(" LEFT JOIN `icd-workshop-01-db`.`category` ON `book`.`category_id` = `category`.`category_id` ");
         statement.append(" WHERE 1 = 1 ");
@@ -127,13 +134,15 @@ public class BookDao {
             @Override
             public Book mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Book book = new Book();
-                book.setBookId(rs.getBigDecimal("book_id"));//private BigDecimal bookId;//`book`.`book_id`,
+                book.setBookId(rs.getLong("book_id"));//private BigDecimal bookId;//`book`.`book_id`,
                 book.setIsbn(rs.getString("isbn"));//private String isbn;//`book`.`isbn`,
                 book.setTitle(rs.getString("title"));//private String title;//`book`.`title`,
                 book.setAuthor(rs.getString("author"));//private String author;//`book`.`author`,
                 book.setYear(rs.getString("year"));//private String year;//`book`.`year`,
-                book.setCategoryId(rs.getBigDecimal("category_id"));//private BigDecimal categoryId;//`book`.`category_id`
+                book.setCategoryId(rs.getLong("category_id"));//private BigDecimal categoryId;//`book`.`category_id`
                 book.setCategoryDescription(rs.getString("category_description"));//private String categoryDescription;//category_description
+                book.setImageId(rs.getString("image_id"));
+                book.setPdfId(rs.getString("pdf_id"));
                 return book;
             }
         });
@@ -209,6 +218,73 @@ public class BookDao {
         rows = jdbcTemplate.update(statement.toString(), param.toArray());
         log.debug("rows: " + rows);
         return rows;
+    }
+
+
+    public Integer countBooks() {
+        log.debug("dao: countBooks: ");
+        StringBuilder statement = new StringBuilder();
+        Integer result = null;
+        List<Object> param = new ArrayList<>();
+        statement.append(" SELECT COUNT(*) FROM `icd-workshop-01-db`.`book` ");
+        log.debug("statement: {}", statement.toString());
+        result = jdbcTemplate.queryForObject(statement.toString(), Integer.class);
+        log.debug("result={}",result);
+        return result;
+    }
+
+    public List<Book> getBooks(int limit, int offset) {
+        log.debug("dao: getBooks: limit={}, offset={}", limit, offset);
+        StringBuilder statement = new StringBuilder();
+        List<Book> resultList = null;
+        Book result = null;
+        List<Object> param = new ArrayList<>();
+        statement.append(" SELECT `book`.`book_id`, ");
+        statement.append("     `book`.`isbn`, ");
+        statement.append("     `book`.`title`, ");
+        statement.append("     `book`.`author`, ");
+        statement.append("     `book`.`year`, ");
+        statement.append("     `book`.`category_id`, ");
+        statement.append("     `book`.`image_id`, ");
+        statement.append("     `book`.`pdf_id`, ");
+        statement.append("     `category`.`category_description` ");
+        statement.append(" FROM `icd-workshop-01-db`.`book` ");
+        statement.append(" LEFT JOIN `icd-workshop-01-db`.`category` ON `book`.`category_id` = `category`.`category_id` ");
+        statement.append(" WHERE 1 = 1 ");
+        statement.append(" ORDER BY `book`.`book_id` ");
+        statement.append(" LIMIT ? OFFSET ? ");
+        param.add(limit);
+        param.add(offset);
+
+        log.debug("statement: {}", statement.toString());
+        resultList = jdbcTemplate.query(statement.toString(), param.toArray(), new BeanPropertyRowMapper<>(Book.class));
+        return resultList;
+    }
+
+    public List<Book> getBooksRecommend() {
+        log.debug("dao: getBooksRecommend");
+        StringBuilder statement = new StringBuilder();
+        List<Book> resultList = null;
+        List<Object> param = new ArrayList<>();
+        statement.append(" SELECT `book`.`book_id`, ");
+        statement.append("     `book`.`isbn`, ");
+        statement.append("     `book`.`title`, ");
+        statement.append("     `book`.`author`, ");
+        statement.append("     `book`.`year`, ");
+        statement.append("     `book`.`category_id`, ");
+        statement.append("     `book`.`image_id`, ");
+        statement.append("     `book`.`pdf_id`, ");
+        statement.append("     `book`.`recommend`, ");
+        statement.append("     `category`.`category_description` ");
+        statement.append(" FROM `icd-workshop-01-db`.`book` ");
+        statement.append(" LEFT JOIN `icd-workshop-01-db`.`category` ON `book`.`category_id` = `category`.`category_id` ");
+        statement.append(" WHERE 1 = 1 ");
+        statement.append(" AND `book`.`recommend` = 'A' ");
+        statement.append(" ORDER BY `book`.`book_id` ");
+
+        log.debug("statement: {}", statement.toString());
+        resultList = jdbcTemplate.query(statement.toString(), param.toArray(), new BeanPropertyRowMapper<>(Book.class));
+        return resultList;
     }
 
 }
