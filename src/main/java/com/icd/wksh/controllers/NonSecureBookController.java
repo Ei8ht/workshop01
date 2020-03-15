@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -68,7 +69,7 @@ public class NonSecureBookController {
     }
 
     @PostMapping
-    public ResponseEntity insertBook(@RequestBody BookRequest body){
+    public ResponseEntity insertBook(@RequestBody BookRequest body) throws IOException {
         log.debug("controller: insertBook: body={}",body);
         int rowEffected = bookService.insertBook(body);
         if(rowEffected > 0){
@@ -79,7 +80,7 @@ public class NonSecureBookController {
     }
 
     @PutMapping("/{bookId}")
-    public ResponseEntity updateBook(@PathVariable String bookId, @RequestBody BookRequest body){
+    public ResponseEntity updateBook(@PathVariable String bookId, @RequestBody BookRequest body) throws IOException {
         log.debug("controller: updateBook: body={}, bookId={}",body,bookId);
         BigDecimal bookIdVal = null;
         try {

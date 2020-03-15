@@ -15,8 +15,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -25,6 +27,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/books")
@@ -36,6 +39,12 @@ public class BookController {
 
     @Value("${app.books.image_path}")
     private String imagePath;
+
+    @Value("${app.books.tmp.pdf_path}")
+    private String pdfTmpPath;
+
+    @Value("${app.books.tmp.image_path}")
+    private String imageTmpPath;
 
     @Autowired
     private BookService bookService;
@@ -108,7 +117,7 @@ public class BookController {
 
     @PostMapping
 //    @PreAuthorize("hasAuthority('BOOK:WRITE')")
-    public ResponseEntity insertBook(@RequestBody BookRequest body){
+    public ResponseEntity insertBook(@RequestBody BookRequest body) throws IOException{
         log.debug("controller: insertBook: body={}",body);
         int rowEffected = bookService.insertBook(body);
         if(rowEffected > 0){
@@ -120,7 +129,7 @@ public class BookController {
 
     @PutMapping("/{bookId}")
 //    @PreAuthorize("hasAuthority('BOOK:WRITE')")
-    public ResponseEntity updateBook(@PathVariable String bookId, @RequestBody BookRequest body){
+    public ResponseEntity updateBook(@PathVariable String bookId, @RequestBody BookRequest body) throws IOException{
         log.debug("controller: updateBook: body={}, bookId={}",body,bookId);
         BigDecimal bookIdVal = null;
         try {
@@ -202,5 +211,27 @@ public class BookController {
                 .contentLength(dataByte.length)
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(dataByte);
+    }
+
+    @PostMapping("/pdf/upload")
+//    @PreAuthorize("hasAnyAuthority('BOOK:WRITE')")
+    public ResponseEntity getBookPdfUpload(HttpServletRequest request,@RequestParam("file") MultipartFile file) throws IOException {
+        log.debug("controller: getBookPdfUpload");
+        String username = (String) request.getAttribute(Constant.USERNAME);
+        UUID uudid = UUID.randomUUID();
+        File convFile = new File(pdfTmpPath+"/"+uudid.toString());
+        file.transferTo(convFile);
+        return ResponseEntity.ok(uudid.toString());
+    }
+
+    @PostMapping("/image/upload")
+//    @PreAuthorize("hasAnyAuthority('BOOK:WRITE')")
+    public ResponseEntity getBookImageUpload(HttpServletRequest request,@RequestParam("file") MultipartFile file) throws IOException {
+        log.debug("controller: getBookImageUpload");
+        String username = (String) request.getAttribute(Constant.USERNAME);
+        UUID uudid = UUID.randomUUID();
+        File convFile = new File(imageTmpPath+"/"+uudid.toString());
+        file.transferTo(convFile);
+        return ResponseEntity.ok(uudid.toString());
     }
 }

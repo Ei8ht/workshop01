@@ -7,12 +7,19 @@ import com.icd.wksh.models.Category;
 import com.icd.wksh.payloads.BookRequest;
 import com.icd.wksh.payloads.GetBooksResponse;
 import com.icd.wksh.payloads.GetUsersResponse;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +28,18 @@ public class BookService {
     private static final Logger log = LoggerFactory.getLogger(BookService.class);
     @Autowired
     private BookDao bookDao;
+
+    @Value("${app.books.pdf_path}")
+    private String pdfPath;
+
+    @Value("${app.books.image_path}")
+    private String imagePath;
+
+    @Value("${app.books.tmp.pdf_path}")
+    private String pdfTmpPath;
+
+    @Value("${app.books.tmp.image_path}")
+    private String imageTmpPath;
 
     public Optional<List<Category>> getCategories(){
         log.debug("service: getCategories");
@@ -47,13 +66,37 @@ public class BookService {
         return Util.wrap(result);
     }
 
-    public int insertBook(BookRequest request){
+    public int insertBook(BookRequest request) throws IOException {
         log.debug("service: insertBook: request={}",request);
+        if(request.getPdfId() != null && !"".equals(request.getPdfId())){
+            Path path = Paths.get(pdfTmpPath+"/"+request.getPdfId());
+            byte[] dataByte = Files.readAllBytes(path);
+            String filePath = pdfPath+"/"+request.getPdfId();
+            FileUtils.writeByteArrayToFile(new File(filePath), dataByte);
+        }
+        if(request.getImageId() != null && !"".equals(request.getImageId())){
+            Path path = Paths.get(imageTmpPath+"/"+request.getImageId());
+            byte[] dataByte = Files.readAllBytes(path);
+            String filePath = imagePath+"/"+request.getImageId();
+            FileUtils.writeByteArrayToFile(new File(filePath), dataByte);
+        }
         return bookDao.insertBook(request);
     }
 
-    public int updateBook(BookRequest request, BigDecimal bookId){
+    public int updateBook(BookRequest request, BigDecimal bookId) throws IOException {
         log.debug("service: updateBook: request={}, bookId={}",request,bookId);
+        if(request.getPdfId() != null && !"".equals(request.getPdfId())){
+            Path path = Paths.get(pdfTmpPath+"/"+request.getPdfId());
+            byte[] dataByte = Files.readAllBytes(path);
+            String filePath = pdfPath+"/"+request.getPdfId();
+            FileUtils.writeByteArrayToFile(new File(filePath), dataByte);
+        }
+        if(request.getImageId() != null && !"".equals(request.getImageId())){
+            Path path = Paths.get(imageTmpPath+"/"+request.getImageId());
+            byte[] dataByte = Files.readAllBytes(path);
+            String filePath = imagePath+"/"+request.getImageId();
+            FileUtils.writeByteArrayToFile(new File(filePath), dataByte);
+        }
         return bookDao.updateBook(request,bookId);
     }
 

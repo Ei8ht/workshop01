@@ -3,7 +3,6 @@ package com.icd.wksh.daos;
 import com.icd.wksh.commons.Util;
 import com.icd.wksh.models.Book;
 import com.icd.wksh.models.Category;
-import com.icd.wksh.models.User;
 import com.icd.wksh.payloads.BookRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -160,6 +157,8 @@ public class BookDao {
         statement.append(" `title`, ");
         statement.append(" `author`, ");
         statement.append(" `year`, ");
+        statement.append(" `pdf_id`, ");
+        statement.append(" `image_id`, ");
         statement.append(" `category_id`) ");
         statement.append(" VALUES ");
         statement.append(" (?, ");
@@ -170,6 +169,10 @@ public class BookDao {
         param.add(request.getAuthor());
         statement.append(" ?, ");
         param.add(request.getYear());
+        statement.append(" ?, ");
+        param.add(request.getPdfId());
+        statement.append(" ?, ");
+        param.add(request.getImageId());
         statement.append(" ?) ");
         param.add(request.getCategoryId());
 
@@ -194,6 +197,10 @@ public class BookDao {
         param.add(request.getAuthor());
         statement.append(" `year` = ? , ");
         param.add(request.getYear());
+        statement.append(" `pdf_id` = ? , ");
+        param.add(request.getPdfId());
+        statement.append(" `image_id` = ? , ");
+        param.add(request.getImageId());
         statement.append(" `category_id` = ? ");
         param.add(request.getCategoryId());
         statement.append(" WHERE `book_id` = ? ");

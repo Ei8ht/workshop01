@@ -7,17 +7,24 @@ public class BookRequest {
     private String title;//`book`.`title`,
     private String author;//`book`.`author`,
     private String year;//`book`.`year`,
-    private BigDecimal categoryId;//`book`.`category_id`
+    private Long categoryId;//`book`.`category_id`
+    private String imageId;
+    private String pdfId;
 
-    @Override
-    public String toString() {
-        return "BookRequest{" +
-                "isbn='" + isbn + '\'' +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", year='" + year + '\'' +
-                ", categoryId=" + categoryId +
-                '}';
+    public String getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(String imageId) {
+        this.imageId = imageId;
+    }
+
+    public String getPdfId() {
+        return pdfId;
+    }
+
+    public void setPdfId(String pdfId) {
+        this.pdfId = pdfId;
     }
 
     public String getIsbn() {
@@ -52,12 +59,24 @@ public class BookRequest {
         this.year = year;
     }
 
-    public BigDecimal getCategoryId() {
+    public Long getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(BigDecimal categoryId) {
+    public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
 
+    @Override
+    public String toString() {
+        return "BookRequest{" +
+                "isbn='" + isbn + '\'' +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", year='" + year + '\'' +
+                ", categoryId=" + categoryId +
+                ", imageId='" + imageId + '\'' +
+                ", pdfId='" + pdfId + '\'' +
+                '}';
+    }
 }
