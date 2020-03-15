@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -40,6 +41,9 @@ public class BookService {
 
     @Value("${app.books.tmp.image_path}")
     private String imageTmpPath;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     public Optional<List<Category>> getCategories(){
         log.debug("service: getCategories");
@@ -80,7 +84,13 @@ public class BookService {
             String filePath = imagePath+"/"+request.getImageId();
             FileUtils.writeByteArrayToFile(new File(filePath), dataByte);
         }
-        return bookDao.insertBook(request);
+        int row = bookDao.insertBook(request);
+        if(row > 0){
+            String message = "Insert "+request.getIsbn() + " "+ request.getTitle();
+            log.info(message);
+            messagingTemplate.convertAndSend("/notification/book", message);
+        }
+        return row;
     }
 
     public int updateBook(BookRequest request, BigDecimal bookId) throws IOException {
@@ -97,7 +107,13 @@ public class BookService {
             String filePath = imagePath+"/"+request.getImageId();
             FileUtils.writeByteArrayToFile(new File(filePath), dataByte);
         }
-        return bookDao.updateBook(request,bookId);
+        int row = bookDao.updateBook(request,bookId);
+        if(row > 0){
+            String message = "Update "+request.getIsbn() + " "+ request.getTitle();
+            log.info(message);
+            messagingTemplate.convertAndSend("/notification/book", message);
+        }
+        return row;
     }
 
     public int deleteBook(BigDecimal bookId){
