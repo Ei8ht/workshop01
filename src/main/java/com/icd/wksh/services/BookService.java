@@ -74,9 +74,9 @@ public class BookService {
         log.debug("service: insertBook: request={}",request);
         if(request.getPdfId() != null && !"".equals(request.getPdfId())){
             try {
-                Path path = Paths.get(pdfTmpPath+"/"+request.getPdfId());
+                Path path = Paths.get(pdfTmpPath+File.separator+request.getPdfId());
                 byte[] dataByte = Files.readAllBytes(path);
-                String filePath = pdfPath+"/"+request.getPdfId();
+                String filePath = pdfPath+File.separator+request.getPdfId();
                 FileUtils.writeByteArrayToFile(new File(filePath), dataByte);
             } catch (IOException e){
                 log.error("error",e);
@@ -84,9 +84,9 @@ public class BookService {
         }
         if(request.getImageId() != null && !"".equals(request.getImageId())){
             try {
-                Path path = Paths.get(imageTmpPath+"/"+request.getImageId());
+                Path path = Paths.get(imageTmpPath+File.separator+request.getImageId());
                 byte[] dataByte = Files.readAllBytes(path);
-                String filePath = imagePath+"/"+request.getImageId();
+                String filePath = imagePath+File.separator+request.getImageId();
                 FileUtils.writeByteArrayToFile(new File(filePath), dataByte);
             } catch (IOException e){
                 log.error("error",e);
@@ -105,9 +105,9 @@ public class BookService {
         log.debug("service: updateBook: request={}, bookId={}",request,bookId);
         if(request.getPdfId() != null && !"".equals(request.getPdfId())){
             try{
-                Path path = Paths.get(pdfTmpPath+"/"+request.getPdfId());
+                Path path = Paths.get(pdfTmpPath+File.separator+request.getPdfId());
                 byte[] dataByte = Files.readAllBytes(path);
-                String filePath = pdfPath+"/"+request.getPdfId();
+                String filePath = pdfPath+File.separator+request.getPdfId();
                 FileUtils.writeByteArrayToFile(new File(filePath), dataByte);
             } catch (IOException e){
                 log.error("error",e);
@@ -116,9 +116,9 @@ public class BookService {
         }
         if(request.getImageId() != null && !"".equals(request.getImageId())){
             try {
-                Path path = Paths.get(imageTmpPath + "/" + request.getImageId());
+                Path path = Paths.get(imageTmpPath + File.separator + request.getImageId());
                 byte[] dataByte = Files.readAllBytes(path);
-                String filePath = imagePath + "/" + request.getImageId();
+                String filePath = imagePath + File.separator + request.getImageId();
                 FileUtils.writeByteArrayToFile(new File(filePath), dataByte);
             } catch (IOException e){
                 log.error("error",e);
