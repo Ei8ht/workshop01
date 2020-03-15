@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -51,7 +52,7 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/categories")
-//    @PreAuthorize("hasAuthority('BOOK:READ')")
+    @PreAuthorize("hasAuthority('BOOK:READ')")
     public ResponseEntity getCategories(HttpServletRequest request){
         log.debug("controller: getCategories:");
         String message = (String) request.getAttribute(Constant.USERNAME);
@@ -66,7 +67,7 @@ public class BookController {
     }
 
     @GetMapping
-//    @PreAuthorize("hasAuthority('BOOK:READ')")
+    @PreAuthorize("hasAuthority('BOOK:READ')")
     public ResponseEntity getBooks(HttpServletRequest request,
                                    @RequestParam("pageSize") int pageSize ,
                                    @RequestParam("pageIndex") int pageIndex){
@@ -97,7 +98,7 @@ public class BookController {
     }
 
     @GetMapping("/{bookId}")
-//    @PreAuthorize("hasAuthority('BOOK:READ')")
+    @PreAuthorize("hasAuthority('BOOK:READ')")
     public ResponseEntity getBooksById(@PathVariable String bookId){
         log.debug("controller: getBooksById:");
         Long bookIdVal = null;
@@ -117,7 +118,7 @@ public class BookController {
     }
 
     @PostMapping
-//    @PreAuthorize("hasAuthority('BOOK:WRITE')")
+    @PreAuthorize("hasAuthority('BOOK:WRITE')")
     public ResponseEntity insertBook(@RequestBody BookRequest body){
         log.debug("controller: insertBook: body={}",body);
         int rowEffected = bookService.insertBook(body);
@@ -129,7 +130,7 @@ public class BookController {
     }
 
     @PutMapping("/{bookId}")
-//    @PreAuthorize("hasAuthority('BOOK:WRITE')")
+    @PreAuthorize("hasAuthority('BOOK:WRITE')")
     public ResponseEntity updateBook(@PathVariable String bookId, @RequestBody BookRequest body) {
         log.debug("controller: updateBook: body={}, bookId={}",body,bookId);
         BigDecimal bookIdVal = null;
@@ -148,7 +149,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{bookId}")
-//    @PreAuthorize("hasAuthority('BOOK:WRITE')")
+    @PreAuthorize("hasAuthority('BOOK:WRITE')")
     public ResponseEntity deleteBook(@PathVariable String bookId){
         log.debug("controller: deleteBook: bookId={}",bookId);
         BigDecimal bookIdVal = null;
@@ -167,7 +168,7 @@ public class BookController {
     }
 
     @GetMapping("/image")
-//    @PreAuthorize("hasAnyAuthority('BOOK:READ')")
+    @PreAuthorize("hasAnyAuthority('BOOK:READ')")
     public ResponseEntity getBookImage(HttpServletRequest request, @RequestParam("bookId") Long bookId) throws IOException {
         log.debug("controller: getBookImage");
         String username = (String) request.getAttribute(Constant.USERNAME);
@@ -190,7 +191,7 @@ public class BookController {
     }
 
     @GetMapping("/pdf")
-//    @PreAuthorize("hasAnyAuthority('BOOK:READ')")
+    @PreAuthorize("hasAnyAuthority('BOOK:READ')")
     public ResponseEntity getBookPdf(HttpServletRequest request,
                                      @RequestParam("bookId") Long bookId) throws IOException {
         log.debug("controller: getBookPdf");
@@ -215,7 +216,7 @@ public class BookController {
     }
 
     @PostMapping("/pdf/upload")
-//    @PreAuthorize("hasAnyAuthority('BOOK:WRITE')")
+    @PreAuthorize("hasAnyAuthority('BOOK:WRITE')")
     public ResponseEntity getBookPdfUpload(HttpServletRequest request,@RequestParam("file") MultipartFile file) throws IOException {
         log.debug("controller: getBookPdfUpload");
         String username = (String) request.getAttribute(Constant.USERNAME);
@@ -226,7 +227,7 @@ public class BookController {
     }
 
     @PostMapping("/image/upload")
-//    @PreAuthorize("hasAnyAuthority('BOOK:WRITE')")
+    @PreAuthorize("hasAnyAuthority('BOOK:WRITE')")
     public ResponseEntity getBookImageUpload(HttpServletRequest request,@RequestParam("file") MultipartFile file) throws IOException {
         log.debug("controller: getBookImageUpload");
         String username = (String) request.getAttribute(Constant.USERNAME);
