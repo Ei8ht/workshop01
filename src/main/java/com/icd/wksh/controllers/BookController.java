@@ -6,6 +6,7 @@ import com.icd.wksh.models.Book;
 import com.icd.wksh.models.Category;
 import com.icd.wksh.payloads.BookRequest;
 import com.icd.wksh.payloads.GetBooksResponse;
+import com.icd.wksh.payloads.Message;
 import com.icd.wksh.services.BookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,9 +122,9 @@ public class BookController {
         log.debug("controller: insertBook: body={}",body);
         int rowEffected = bookService.insertBook(body);
         if(rowEffected > 0){
-            return ResponseEntity.ok(rowEffected+" row effected");
+            return ResponseEntity.ok(new Message(rowEffected+" row effected"));
         } else {
-            return ResponseEntity.ok("0 row effected");
+            return ResponseEntity.ok(new Message("0 row effected"));
         }
     }
 
@@ -140,9 +141,9 @@ public class BookController {
 
         int rowEffected = bookService.updateBook(body, bookIdVal);
         if(rowEffected > 0){
-            return ResponseEntity.ok(rowEffected+" row effected");
+            return ResponseEntity.ok(new Message(rowEffected+" row effected"));
         } else {
-            return ResponseEntity.ok("0 row effected");
+            return ResponseEntity.ok(new Message("0 row effected"));
         }
     }
 
@@ -159,9 +160,9 @@ public class BookController {
 
         int rowEffected = bookService.deleteBook(bookIdVal);
         if(rowEffected > 0){
-            return ResponseEntity.ok(rowEffected+" row effected");
+            return ResponseEntity.ok(new Message(rowEffected+" row effected"));
         } else {
-            return ResponseEntity.ok("0 row effected");
+            return ResponseEntity.ok(new Message("0 row effected"));
         }
     }
 
