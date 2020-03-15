@@ -66,36 +66,53 @@ public class BookService {
         return Util.wrap(result);
     }
 
-    public int insertBook(BookRequest request) throws IOException {
+    public int insertBook(BookRequest request) {
         log.debug("service: insertBook: request={}",request);
         if(request.getPdfId() != null && !"".equals(request.getPdfId())){
-            Path path = Paths.get(pdfTmpPath+"/"+request.getPdfId());
-            byte[] dataByte = Files.readAllBytes(path);
-            String filePath = pdfPath+"/"+request.getPdfId();
-            FileUtils.writeByteArrayToFile(new File(filePath), dataByte);
+            try {
+                Path path = Paths.get(pdfTmpPath+"/"+request.getPdfId());
+                byte[] dataByte = Files.readAllBytes(path);
+                String filePath = pdfPath+"/"+request.getPdfId();
+                FileUtils.writeByteArrayToFile(new File(filePath), dataByte);
+            } catch (IOException e){
+                log.error("error",e);
+            }
         }
         if(request.getImageId() != null && !"".equals(request.getImageId())){
-            Path path = Paths.get(imageTmpPath+"/"+request.getImageId());
-            byte[] dataByte = Files.readAllBytes(path);
-            String filePath = imagePath+"/"+request.getImageId();
-            FileUtils.writeByteArrayToFile(new File(filePath), dataByte);
+            try {
+                Path path = Paths.get(imageTmpPath+"/"+request.getImageId());
+                byte[] dataByte = Files.readAllBytes(path);
+                String filePath = imagePath+"/"+request.getImageId();
+                FileUtils.writeByteArrayToFile(new File(filePath), dataByte);
+            } catch (IOException e){
+                log.error("error",e);
+            }
         }
         return bookDao.insertBook(request);
     }
 
-    public int updateBook(BookRequest request, BigDecimal bookId) throws IOException {
+    public int updateBook(BookRequest request, BigDecimal bookId) {
         log.debug("service: updateBook: request={}, bookId={}",request,bookId);
         if(request.getPdfId() != null && !"".equals(request.getPdfId())){
-            Path path = Paths.get(pdfTmpPath+"/"+request.getPdfId());
-            byte[] dataByte = Files.readAllBytes(path);
-            String filePath = pdfPath+"/"+request.getPdfId();
-            FileUtils.writeByteArrayToFile(new File(filePath), dataByte);
+            try{
+                Path path = Paths.get(pdfTmpPath+"/"+request.getPdfId());
+                byte[] dataByte = Files.readAllBytes(path);
+                String filePath = pdfPath+"/"+request.getPdfId();
+                FileUtils.writeByteArrayToFile(new File(filePath), dataByte);
+            } catch (IOException e){
+                log.error("error",e);
+            }
+
         }
         if(request.getImageId() != null && !"".equals(request.getImageId())){
-            Path path = Paths.get(imageTmpPath+"/"+request.getImageId());
-            byte[] dataByte = Files.readAllBytes(path);
-            String filePath = imagePath+"/"+request.getImageId();
-            FileUtils.writeByteArrayToFile(new File(filePath), dataByte);
+            try {
+                Path path = Paths.get(imageTmpPath + "/" + request.getImageId());
+                byte[] dataByte = Files.readAllBytes(path);
+                String filePath = imagePath + "/" + request.getImageId();
+                FileUtils.writeByteArrayToFile(new File(filePath), dataByte);
+            } catch (IOException e){
+                log.error("error",e);
+            }
         }
         return bookDao.updateBook(request,bookId);
     }

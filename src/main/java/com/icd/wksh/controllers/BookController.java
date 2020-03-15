@@ -117,7 +117,7 @@ public class BookController {
 
     @PostMapping
 //    @PreAuthorize("hasAuthority('BOOK:WRITE')")
-    public ResponseEntity insertBook(@RequestBody BookRequest body) throws IOException{
+    public ResponseEntity insertBook(@RequestBody BookRequest body){
         log.debug("controller: insertBook: body={}",body);
         int rowEffected = bookService.insertBook(body);
         if(rowEffected > 0){
@@ -129,7 +129,7 @@ public class BookController {
 
     @PutMapping("/{bookId}")
 //    @PreAuthorize("hasAuthority('BOOK:WRITE')")
-    public ResponseEntity updateBook(@PathVariable String bookId, @RequestBody BookRequest body) throws IOException{
+    public ResponseEntity updateBook(@PathVariable String bookId, @RequestBody BookRequest body) {
         log.debug("controller: updateBook: body={}, bookId={}",body,bookId);
         BigDecimal bookIdVal = null;
         try {
