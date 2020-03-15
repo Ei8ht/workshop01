@@ -222,7 +222,7 @@ public class BookController {
         UUID uudid = UUID.randomUUID();
         File convFile = new File(pdfTmpPath+"/"+uudid.toString());
         file.transferTo(convFile);
-        return ResponseEntity.ok(uudid.toString());
+        return ResponseEntity.ok(new Message(uudid.toString()));
     }
 
     @PostMapping("/image/upload")
@@ -233,6 +233,6 @@ public class BookController {
         UUID uudid = UUID.randomUUID();
         File convFile = new File(imageTmpPath+"/"+uudid.toString());
         file.transferTo(convFile);
-        return ResponseEntity.ok(uudid.toString());
+        return ResponseEntity.ok(new Message(uudid.toString()));
     }
 }
