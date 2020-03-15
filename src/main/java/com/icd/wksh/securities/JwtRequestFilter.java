@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -38,15 +39,21 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
 		log.debug("JwtRequestFilter: doFilterInternal");
-
 		final String requestTokenHeader = request.getHeader("Authorization");
-
+		final String websocketToken = request.getParameter("access_token");
 		String username = null;
 		String jwtToken = null;
 		// JWT Token is in the form "Bearer token". Remove Bearer word and get
 		// only the Token
-		if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
-			jwtToken = requestTokenHeader.substring(7);
+		if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ") || request.getRequestURI().contains("/book-websocket") && !StringUtils.isEmpty(websocketToken))  {
+
+			if(!StringUtils.isEmpty(requestTokenHeader)){
+				jwtToken = requestTokenHeader.substring(7);
+			}else if(!StringUtils.isEmpty(websocketToken)){
+				jwtToken = websocketToken;
+			}
+
+
 			try {
 //				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 //				response.setContentType(MediaType.APPLICATION_JSON_VALUE);
